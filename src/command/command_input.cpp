@@ -16,7 +16,7 @@ command_input::command_input(const std::vector<std::string>& input_tokens) {
         std::string token = input_tokens[i];
         if (token.starts_with('-')) {
             if (i+1 >= input_tokens.size()) {
-                throw "flag missing argument";
+                throw std::runtime_error("flag missing argument");
             }
             std::string next = input_tokens[i+1];
             i++;
@@ -32,4 +32,12 @@ command_input::command_input(const std::vector<std::string>& input_tokens) {
 
 std::string command_input::getName() {
     return name;
+}
+
+std::vector<std::string> command_input::getParameters() {
+    return parameters;
+}
+
+std::unordered_map<std::string, std::string> command_input::getFlags() {
+    return flags;
 }

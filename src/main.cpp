@@ -16,6 +16,7 @@ int main() {
     std::cout << "done" << std::endl;
 
     while (!exit) {
+        std::cout << std::endl;
         std::string input;
         std::cout << "> ";
         getline(std::cin, input);
@@ -26,14 +27,14 @@ int main() {
                 auto parsed_command_input = command_input(tokens);
                 auto name = parsed_command_input.getName();
                 if (!commands.contains(name)) {
-                    throw "Command not found: " + name;
+                    throw std::runtime_error("Command not found: " + name);
                 }
                 command parsed_command = commands.at(name);
                 if (parsed_command.execute(parsed_command_input) == -1) {
                     exit = true;
                 }
-            } catch (std::string err) {
-                std::cout << err << std::endl;
+            } catch (const std::runtime_error ex) {
+                std::cout << ex.what() << std::endl;
             }
         }
     }
@@ -43,6 +44,11 @@ int main() {
 void buildCommands(std::unordered_map<std::string, command>& map) {
     map["help"] = command("help", [](command_input) {
         std::cout << "help command executed" << std::endl;
+        return 0;
+    });
+    map["start"] = command("start", [](command_input command_input) {
+        command_input
+        startClient();
         return 0;
     });
 }

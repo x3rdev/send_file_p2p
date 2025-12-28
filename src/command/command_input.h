@@ -15,6 +15,10 @@ public:
 
     std::string getName();
 
+    std::vector<std::string> getParameters();
+
+    std::unordered_map<std::string, std::string> getFlags();
+
 private:
     std::string name;
     std::vector<std::string> parameters;
