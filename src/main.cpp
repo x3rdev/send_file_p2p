@@ -5,14 +5,14 @@
 #include <iostream>
 #include <string>
 #include "client.h"
-#include "input_pattern/input_pattern.h"
-
-static std::map<std::string, input_pattern> patterns = {{}};
+#include "command/command.h"
+#include "command/command_input.h"
 
 int main() {
     std::cout << "initializing send_file_p2p" << std::endl;
     bool exit = false;
-    setupPatterns();
+    auto commands = std::unordered_map<std::string, command>();
+    buildCommands(commands);
     std::cout << "done" << std::endl;
 
     while (!exit) {
@@ -21,34 +21,38 @@ int main() {
         getline(std::cin, input);
 
         std::vector<std::string> tokens = tokenizeInput(input);
-
-        input_pattern command = patterns.at(tokens[0]);
-        command.execute();
+        if (tokens.size() > 0) {
+            try {
+                auto parsed_command_input = command_input(tokens);
+                auto name = parsed_command_input.getName();
+                if (!commands.contains(name)) {
+                    throw "Command not found: " + name;
+                }
+                command parsed_command = commands.at(name);
+                if (parsed_command.execute(parsed_command_input) == -1) {
+                    exit = true;
+                }
+            } catch (std::string err) {
+                std::cout << err << std::endl;
+            }
+        }
     }
     return 0;
+}
+
+void buildCommands(std::unordered_map<std::string, command>& map) {
+    map["help"] = command("help", [](command_input) {
+        std::cout << "help command executed" << std::endl;
+        return 0;
+    });
 }
 
 std::vector<std::string> tokenizeInput(const std::string& s) {
     std::istringstream iss(s);
     std::vector<std::string> result;
     std::string word;
-
     while (iss >> word) {
         result.push_back(word);
     }
     return result;
-}
-
-void setupPatterns() {
-    patterns.try_emplace(
-        std::string("help"),
-        input_pattern(
-            std::string("help"),
-            std::vector<flag_type>{},
-            std::map<std::string, flag_type>{{"c", flag_type::bool_}},
-            [](const std::vector<flag_type>&, const std::map<std::string, flag_type>&) {
-                std::cout << "HI";
-            }
-        )
-    );
 }
