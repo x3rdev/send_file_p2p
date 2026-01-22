@@ -47,9 +47,23 @@ void buildCommands(std::unordered_map<std::string, command>& map) {
         return 0;
     });
     map["start"] = command("start", [](command_input command_input) {
-        command_input
-        startClient();
+        int port;
+        if (command_input.getParameters().size() > 0) {
+            port = std::stoi(command_input.getParameters()[0]);
+        } else {
+            port = 8000;
+        }
+        startClient(port);
         return 0;
+    });
+    map["stop"] = command("stop", [](command_input command_input) {
+        std::cout << "stop command executed" << std::endl;
+        stopClient();
+        return 0;
+    });
+    map["quit"] = command("quit", [](command_input command_input) {
+        std::cout << "quitting" << std::endl;
+        return -1;
     });
 }
 
