@@ -4,6 +4,7 @@
 
 #ifndef SEND_FILE_P2P_CLI_H
 #define SEND_FILE_P2P_CLI_H
+#include <functional>
 #include <string>
 
 namespace cli {
@@ -14,7 +15,10 @@ namespace cli {
         exit
     };
 
-    void loop();
+    using CmdHandler = std::function<status(const std::vector<std::string>& args)>;
+
+    bool RegisterCommand(const std::string& input, const CmdHandler& handler);
+    void Loop();
 
 }
 

@@ -3,23 +3,30 @@
 
 #include "cli/cli.h"
 
-static void log(const std::string &msg);
-void init();
+static void Log(const std::string &msg);
+void Init();
 
 int main(int argc, char* argv[]) {
-    log("initializing send_file_p2p");
-    init();
-    log("done");
+    Log("initializing send_file_p2p");
+    Init();
+    Log("done");
 
-    cli::loop();
+    cli::Loop();
     return EXIT_SUCCESS;
 }
 
-static void log(const std::string &msg) {
+static void Log(const std::string &msg) {
     std::cout << "[CLIENT]: " << msg << std::endl;
 }
 
-void init() {
+void Init() {
+    cli::RegisterCommand("help", [](const std::vector<std::string>& args) {
+        Log("List of commands:");
 
+        return cli::status::ok;
+    });
+    cli::RegisterCommand("quit", [](const std::vector<std::string>& args) {
+        return cli::status::exit;
+    });
 }
 

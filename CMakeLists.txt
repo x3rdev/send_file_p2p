@@ -7,6 +7,4 @@ add_executable(send_file_p2p
         src/client/main.cpp
         src/client/cli/cli.h
         src/client/cli/cli.cpp
-        src/client/cli/command.cpp
-        src/client/cli/command.h
 )
