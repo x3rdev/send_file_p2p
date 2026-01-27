@@ -1,13 +1,13 @@
 
 #include <iostream>
 
-#include "cli/cli.h"
+#include "../common/cli/cli.h"
+#include "../common/log/logger.h"
 
-static void Log(const std::string &msg);
 void Init();
 
 int main(int argc, char* argv[]) {
-    Log("initializing send_file_p2p");
+    Log("initializing send_file_p2p client");
     Init();
     Log("done");
 
@@ -15,14 +15,9 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-static void Log(const std::string &msg) {
-    std::cout << "[CLIENT]: " << msg << std::endl;
-}
-
 void Init() {
     cli::RegisterCommand("help", [](const std::vector<std::string>& args) {
-        Log("List of commands:");
-
+        cli::PrintCommands();
         return cli::status::ok;
     });
     cli::RegisterCommand("quit", [](const std::vector<std::string>& args) {
