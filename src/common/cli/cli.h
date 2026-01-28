@@ -8,13 +8,9 @@
 #include <functional>
 #include <string>
 
-namespace cli {
+#include "../status.h"
 
-    enum class status {
-        ok,
-        error,
-        exit
-    };
+namespace cli {
 
     using CmdHandler = std::function<status(const std::vector<std::string>& args)>;
 

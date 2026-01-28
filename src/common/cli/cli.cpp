@@ -8,6 +8,7 @@
 #include <map>
 #include <sstream>
 
+#include "../status.h"
 #include "../log/logger.h"
 
 std::vector<std::string> Tokenize(const std::string& input);
@@ -27,7 +28,7 @@ namespace cli {
     status Loop() {
         std::string line;
         auto loop_status = status::ok;
-        while (loop_status == status::ok) {
+        while (loop_status != status::error && loop_status != status::exit) {
             std::cout << ">" << std::flush;
             std::getline(std::cin, line);
             if (std::cin.eof()) {
@@ -44,7 +45,7 @@ namespace cli {
                 if (it != command_registry.end()) {
                     loop_status = it->second(tokens);
                 } else {
-                    std::cout << "Unknown command: " << tokens[0] << std::endl;
+                    Log("Unknown command: " + tokens[0]);
                 }
             }
         }
@@ -52,6 +53,7 @@ namespace cli {
     }
 
     void PrintCommands() {
+        Log("List of commands: ");
         std::string line;
         bool first = true;
         for (const auto& command : command_registry) {
@@ -72,6 +74,9 @@ std::vector<std::string> Tokenize(const std::string& input) {
     std::string token;
 
     while (stream >> token) {
+        for (char &c : token) {
+            c = static_cast<char>(std::tolower(c));
+        }
         tokens.push_back(token);
     }
     return tokens;

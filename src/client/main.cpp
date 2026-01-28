@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "../common/status.h"
 #include "../common/cli/cli.h"
 #include "../common/log/logger.h"
 
@@ -11,17 +12,19 @@ int main(int argc, char* argv[]) {
     Init();
     Log("done");
 
-    cli::Loop();
+    if (cli::Loop() == status::error) {
+        return EXIT_FAILURE;
+    }
     return EXIT_SUCCESS;
 }
 
 void Init() {
     cli::RegisterCommand("help", [](const std::vector<std::string>& args) {
         cli::PrintCommands();
-        return cli::status::ok;
+        return status::ok;
     });
     cli::RegisterCommand("quit", [](const std::vector<std::string>& args) {
-        return cli::status::exit;
+        return status::exit;
     });
 }
 

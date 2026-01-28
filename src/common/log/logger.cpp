@@ -7,5 +7,5 @@
 #include <iostream>
 
 extern void Log(const std::string &msg) {
-    std::cout << "[CLIENT]: " << msg << std::endl;
+    std::cout << "[SFP2P]: " << msg << std::endl;
 }

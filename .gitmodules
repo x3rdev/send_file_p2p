@@ -1,3 +1,0 @@
-[submodule "extern/librats"]
-	path = extern/librats
-	url = https://github.com/librats/librats.git
