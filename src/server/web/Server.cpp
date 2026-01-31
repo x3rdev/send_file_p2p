@@ -41,21 +41,45 @@ void Server::Run() {
             acceptor_->accept(socket);
 
             char buffer[1024];
-            socket.read_some(asio::buffer(buffer));
+            size_t len = socket.read_some(asio::buffer(buffer));
 
-            std::string body = "Hello World";
-            std::string message =
-                "HTTP/1.1 200 OK\r\n"
-                "Content-Length: " + std::to_string(body.size()) + "\r\n"
-                "Connection: close\r\n"
-                "\r\n" +
-                body;
-
-            asio::write(socket, asio::buffer(message));
+            std::string request(buffer, len);
+            std::string response = HandleRequest(request);
+            asio::write(socket, asio::buffer(response));
         }
-    } catch (std::exception& e) {
+    } catch (std::exception& e) {   
         if (!running_) {
             Log(e.what());
         }
     }
+}
+
+std::string Server::HandleRequest(const std::string& request) {
+    // Parse the first line to get the path
+    size_t method_end = request.find(' ');
+    size_t path_end = request.find(' ', method_end + 1);
+
+    if (method_end == std::string::npos || path_end == std::string::npos) {
+        return CreateResponse(400, "Bad Request");
+    }
+
+    std::string path = request.substr(method_end + 1, path_end - method_end - 1);
+
+    if (path == "/stun") {
+        return CreateResponse(200, "STUN endpoint");
+    } else if (path == "/") {
+        return CreateResponse(200, "Hello World");
+    } else {
+        return CreateResponse(404, "Not Found");
+    }
+}
+
+std::string Server::CreateResponse(int status_code, const std::string& body) {
+    std::string status_text = (status_code == 200) ? "OK" :
+                               (status_code == 404) ? "Not Found" : "Bad Request";
+
+    return "HTTP/1.1 " + std::to_string(status_code) + " " + status_text + "\r\n"
+           "Content-Length: " + std::to_string(body.size()) + "\r\n"
+           "Connection: close\r\n"
+           "\r\n" + body;
 }

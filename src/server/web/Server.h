@@ -27,6 +27,8 @@ private:
     std::thread server_thread_;
 
     void Run();
+    std::string HandleRequest(const std::string& request);
+    std::string CreateResponse(int status_code, const std::string& body);
 };
 
 #endif //SEND_FILE_P2P_SERVER_H
