@@ -1,6 +1,8 @@
 project(client)
 add_executable(client
         main.cpp
+        Client.cpp
+        Client.h
 )
 
 target_link_libraries(client

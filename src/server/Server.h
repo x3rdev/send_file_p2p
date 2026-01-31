@@ -23,12 +23,11 @@ private:
     std::atomic<bool> running_ = false;
 
     asio::io_context io_context_;
-    std::unique_ptr<asio::ip::tcp::acceptor> acceptor_;
+    std::unique_ptr<asio::ip::udp::endpoint> endpoint_;
+    std::unique_ptr<asio::ip::udp::socket> socket_;
     std::thread server_thread_;
 
     void Run();
-    std::string HandleRequest(const std::string& request);
-    std::string CreateResponse(int status_code, const std::string& body);
 };
 
 #endif //SEND_FILE_P2P_SERVER_H

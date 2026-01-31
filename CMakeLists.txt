@@ -24,3 +24,7 @@ target_compile_definitions(asio INTERFACE
 add_subdirectory(src/server)
 add_subdirectory(src/client)
 add_subdirectory(src/common)
+
+if(WIN32)
+    add_compile_definitions(_WIN32_WINNT=0x0A00)
+endif()

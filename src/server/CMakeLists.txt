@@ -1,8 +1,8 @@
 project(server)
 add_executable(server
         main.cpp
-        web/Server.cpp
-        web/Server.h
+        Server.cpp
+        Server.h
 )
 
 target_link_libraries(server

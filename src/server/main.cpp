@@ -7,7 +7,7 @@
 
 #include "../common/cli/cli.h"
 #include "../common/log/logger.h"
-#include "web/Server.h"
+#include "Server.h"
 
 Server* server;
 
@@ -25,15 +25,13 @@ int main(int argc, char* argv[]) {
 }
 
 void Init() {
-
-
+    server = new Server(3478);
     cli::RegisterCommand("server", [](const std::vector<std::string>& args) {
         if (args.size() != 2) {
             Log("Usage: \"server [start | stop | status]\"");
             return status::warning;
         }
         if (args[1] == "start") {
-            server = new Server(8080);
             server->Start();
         }
         if (args[1] == "stop") {
