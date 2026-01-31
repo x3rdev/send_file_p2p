@@ -16,7 +16,6 @@ void Init();
 int main(int argc, char* argv[]) {
     Log("initializing send_file_p2p server");
     Init();
-    Log("done");
 
     if (cli::Loop() == status::error) {
         return EXIT_FAILURE;
@@ -26,34 +25,9 @@ int main(int argc, char* argv[]) {
 
 void Init() {
     server = new Server(3478);
-    cli::RegisterCommand("server", [](const std::vector<std::string>& args) {
-        if (args.size() != 2) {
-            Log("Usage: \"server [start | stop | status]\"");
-            return status::warning;
-        }
-        if (args[1] == "start") {
-            server->Start();
-        }
-        if (args[1] == "stop") {
-            if (server == nullptr) {
-                Log("Server has not been started, unable to stop");
-                return status::warning;
-            }
-            server->Stop();
-        }
-        if (args[1] == "status") {
-            if (server == nullptr) {
-                Log("Status - stopped");
-                return status::warning;
-            }
-            if (server->isRunning()) {
-                Log("Status - started");
-                Log("Uptime - ");
-            } else {
-                Log("Status - stopped");
-            }
-            return status::ok;
-        }
+    cli::RegisterCommand("status", [](const std::vector<std::string>& args) {
+        Log("Status - started");
+        Log("Uptime - ");
         return status::ok;
     });
     cli::RegisterCommand("help", [](const std::vector<std::string>& args) {
@@ -61,6 +35,7 @@ void Init() {
         return status::ok;
     });
     cli::RegisterCommand("quit", [](const std::vector<std::string>& args) {
+        delete server;
         return status::exit;
     });
 }

@@ -19,6 +19,7 @@ target_include_directories(asio INTERFACE
 target_compile_definitions(asio INTERFACE
         ASIO_STANDALONE
         ASIO_NO_DEPRECATED
+        _WIN32_WINNT=0x0A00
 )
 
 add_subdirectory(src/server)

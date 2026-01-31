@@ -4,6 +4,7 @@
 
 #include "cli.h"
 
+#include <format>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -45,7 +46,7 @@ namespace cli {
                 if (it != command_registry.end()) {
                     loop_status = it->second(tokens);
                 } else {
-                    Log("Unknown command: " + tokens[0]);
+                    Log(std::format("Unknown command [{}]", tokens[0]));
                 }
             }
         }

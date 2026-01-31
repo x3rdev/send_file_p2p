@@ -17,7 +17,6 @@ void Init();
 int main(int argc, char* argv[]) {
     Log("initializing send_file_p2p client");
     Init();
-    Log("done");
     if (cli::Loop() == status::error) {
         return EXIT_FAILURE;
     }
@@ -26,8 +25,8 @@ int main(int argc, char* argv[]) {
 
 void Init() {
     client = new Client();
-    cli::RegisterCommand("connect", [](const std::vector<std::string> & args) {
-        client->Connect();
+    cli::RegisterCommand("stun", [](const std::vector<std::string> & args) {
+        client->DiscoverClientAddress();
         return status::ok;
     });
     cli::RegisterCommand("help", [](const std::vector<std::string>& args) {

@@ -12,22 +12,17 @@
 
 class Server {
 public:
-    explicit Server(uint16_t port);
-
-    void Start();
-    void Stop();
-
-    bool isRunning() {return running_;};
+    Server(uint16_t port);
+    ~Server();
 private:
     uint16_t port_;
-    std::atomic<bool> running_ = false;
 
     asio::io_context io_context_;
     std::unique_ptr<asio::ip::udp::endpoint> endpoint_;
     std::unique_ptr<asio::ip::udp::socket> socket_;
     std::thread server_thread_;
 
-    void Run();
+    void Run() const;
 };
 
 #endif //SEND_FILE_P2P_SERVER_H

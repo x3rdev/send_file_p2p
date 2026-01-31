@@ -11,9 +11,13 @@
 
 class Client {
 public:
-    status Connect();
+    Client();
+    ~Client();
+    status DiscoverClientAddress();
 private:
     asio::io_context io_context_;
+    std::unique_ptr<asio::ip::udp::resolver> resolver_;
+    std::unique_ptr<asio::ip::udp::socket> socket_;
 };
 
 
