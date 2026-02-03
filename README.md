@@ -1,7 +1,7 @@
 # send_file_p2p
 
 **Open‑source peer‑to‑peer file sending software** written in C++ (with some C).  
-This project enables direct file transfer between peers over a network without relying on centralized servers.
+This project enables direct file transfer between peers over a network without relying on a relay server.
 
 ## 🚀 Features
 
